@@ -8,11 +8,8 @@ namespace FantasyRPG
 {
     public class GameWorld
     {
-        private static GameWorld _instance = new GameWorld();
-        static GameWorld()
-        {
-
-        }
+        private static GameWorld instance = null;
+        private static readonly object padlock = new object();
 
         private GameWorld() 
         {
@@ -23,7 +20,17 @@ namespace FantasyRPG
         {
             get
             {
-                return _instance;
+                if (instance == null) 
+                {
+                    lock (padlock)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new GameWorld();
+                        }
+                    }
+                }
+                return instance;
             }
         }
     }
